@@ -94,6 +94,8 @@ found in the LICENSE file.
 
       var PLAYER_HEIGHT = 1.65;
 
+      var button_pressed = new Array(10);
+
       var vrDisplay = null;
       var frameData = null;
       var projectionMat = mat4.create();
@@ -145,6 +147,7 @@ found in the LICENSE file.
       // ================================
 
       function onVRRequestPresent () {
+        console.log("onVRRequestPresent");
         // This can only be called in response to a user gesture.
         vrDisplay.requestPresent([{ source: webglCanvas }]).then(function () {
           // Nothing to do because we're handling things in onVRPresentChange.
@@ -158,6 +161,7 @@ found in the LICENSE file.
       }
 
       function onVRExitPresent () {
+        console.log("onVRExitPresent");
         if (!vrDisplay.isPresenting)
           return;
 
@@ -173,6 +177,7 @@ found in the LICENSE file.
       }
 
       function onVRPresentChange () {
+        console.log("onVRPresentChange");
         onResize();
 
         if (vrDisplay.isPresenting) {
@@ -245,9 +250,13 @@ found in the LICENSE file.
 
       var leftIntersect = false;
       var rightIntersect = false;
+      var topIntersect = false;
+      var bottomIntersect = false;
 
       var leftPosition = [-0.5, PLAYER_HEIGHT, -1.0];
       var rightPosition = [0.5, PLAYER_HEIGHT, -1.0];
+      var topPosition = [0.0, PLAYER_HEIGHT + 0.7, -1.0];
+      var bottomPosition = [0.0, PLAYER_HEIGHT - 0.7, -1.0];
 
       function onClick () {
         console.log("onClick");
@@ -258,6 +267,9 @@ found in the LICENSE file.
         } else if (rightIntersect) {
           // Navigate to a 2D site
           window.location = "index.html"
+        } else if (topIntersect) {
+        } else if (bottomIntersect) {
+          onVRExitPresent();
         } else {
           // Reset the background color to a random value
           gl.clearColor(
@@ -304,6 +316,19 @@ found in the LICENSE file.
         } else {
           debugGeom.drawCube(0, rightPosition, 0.3, [0, 1, 0, 1]);
         }
+
+        if (topIntersect) {
+          debugGeom.drawCube(0, topPosition, 0.35, [0.5, 0, 1, 1]);
+        } else {
+          debugGeom.drawCube(0, topPosition, 0.3, [0, 0, 1, 1]);
+        }
+
+        if (bottomIntersect) {
+          debugGeom.drawCube(0, bottomPosition, 0.35, [0.5, 0, 1, 1]);
+        } else {
+          debugGeom.drawCube(0, bottomPosition, 0.3, [0, 0, 1, 1]);
+        }
+
       }
 
       function lookingAtSphere(position, radius, pose) {
@@ -336,11 +361,16 @@ found in the LICENSE file.
 
                 for (var j = 0; j < gamepad.buttons.length; ++j) {
                   if (gamepad.buttons[j].pressed) {
-                    console.log("Button " + j + " pressed");
-					onClick();
-                    break;
+                    if (!button_pressed[j]) {
+                      console.log("Button " + j + " pressed");
+                      button_pressed[j] = true;
+                      onClick();
+                    }
                   }
-                }
+                  else {
+                    button_pressed[j] = false;
+                  }
+               }
             }
           }
 
@@ -352,6 +382,8 @@ found in the LICENSE file.
 
           leftIntersect = lookingAtSphere(leftPosition, 0.35, frameData.pose);
           rightIntersect = lookingAtSphere(rightPosition, 0.35, frameData.pose);
+          topIntersect = lookingAtSphere(topPosition, 0.35, frameData.pose);
+          bottomIntersect = lookingAtSphere(bottomPosition, 0.35, frameData.pose);
 
           if (vrDisplay.isPresenting) {
             gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
