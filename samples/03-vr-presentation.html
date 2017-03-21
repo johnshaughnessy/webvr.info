@@ -303,6 +303,7 @@ found in the LICENSE file.
           //var pose = vrDisplay.getPose();
           vrDisplay.getFrameData(frameData);
 
+          console.log("vrDisplay.isPresenting = " + vrDisplay.isPresenting);
           if (vrDisplay.isPresenting) {
             // When presenting render a stereo view.
             gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
