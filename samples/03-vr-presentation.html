@@ -281,6 +281,7 @@ found in the LICENSE file.
             Math.random() * 0.5,
             Math.random() * 0.5,
             Math.random() * 0.5, 1.0);
+        window.requestAnimationFrame(onAnimationFrame);
       }
       webglCanvas.addEventListener("click", onClick, false);
 
@@ -325,6 +326,7 @@ found in the LICENSE file.
             stats.renderOrtho();
           }
         } else {
+          console.log("vrDisplay = " + vrDisplay);
           window.requestAnimationFrame(onAnimationFrame);
 
           // No VRDisplay found.
