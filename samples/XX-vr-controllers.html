@@ -320,9 +320,9 @@ found in the LICENSE file.
           var touched = 0;
           for (var j = 0; j < gamepad.buttons.length; ++j) {
             if (j == 0 && gamepad.buttons[j].touched) {
-              touched = 0.5;
+              touched = 1;
               console.log("touchpad touched!");
-              gamepadColor[1] = touched;
+              vec4.set(gamepadColor, 0, touched, 1, 1);
             }
             if (j == 0 && gamepad.buttons[j].pressed) {
               vec4.set(gamepadColor, gamepad.buttons[j].value, 0.5, touched, 1);
