@@ -262,7 +262,7 @@ found in the LICENSE file.
 
       function onClick () {
         console.log("onClick");
-        if (leftIntersect) {
+/*        if (leftIntersect) {
           // Navigate back to this page (with a different query string to force
           // navigation)
           window.location = "test-vr-links.html?id=" + nextPageId;
@@ -271,7 +271,7 @@ found in the LICENSE file.
           window.location = "index.html"
         } else if (topIntersect) {
           window.location = "03-vr-presentation.html";
-        } else if (bottomIntersect) {
+        } else*/ if (bottomIntersect) {
           onVRExitPresent();
         } else {
           // Reset the background color to a random value
@@ -308,7 +308,7 @@ found in the LICENSE file.
 
         debugGeom.bind(projection, view);
 
-        if (leftIntersect) {
+        /*if (leftIntersect) {
           debugGeom.drawCube(0, leftPosition, 0.35, [0.5, 0, 1, 1]);
         } else {
           debugGeom.drawCube(0, leftPosition, 0.3, [0, 0, 1, 1]);
@@ -324,7 +324,7 @@ found in the LICENSE file.
           debugGeom.drawCube(0, topPosition, 0.35, [0.5, 0.5, 1, 1]);
         } else {
           debugGeom.drawCube(0, topPosition, 0.3, [0, 0.5, 1, 1]);
-        }
+        } */
 
         if (bottomIntersect) {
           debugGeom.drawCube(0, bottomPosition, 0.35, [1, 0.5, 0, 1]);
