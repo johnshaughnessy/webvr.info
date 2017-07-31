@@ -293,7 +293,7 @@ found in the LICENSE file.
           }
           else {
             // not VR gamepad, use identity pose
-            getPoseMatrix(gamepadMat, [0, 0, 0, 1], true);
+            getPoseMatrix(gamepadMat, { orientation:null, position:null}, true);
           }
 
           // Loop through all the gamepad's axes and scale the gamepad geometry
