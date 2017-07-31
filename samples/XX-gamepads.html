@@ -284,6 +284,8 @@ found in the LICENSE file.
         // Render every gamepad with a pose we found
         for (var i = 0; i < gamepads.length; ++i) {
           var gamepad = gamepads[i];
+          if (!gamepad)
+            continue;
 
           // Because this sample is done in standing space we need to apply
           // the same transformation to the gamepad pose as we did the
