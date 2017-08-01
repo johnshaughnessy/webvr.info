@@ -257,7 +257,7 @@ found in the LICENSE file.
         }
       }
 
-      function getPoseMatrix (out, pose, isGamepad) {
+      function getPoseMatrix (out, pose, isGamepad, index) {
         orientation = pose.orientation;
         position = pose.position;
         if (!orientation) { orientation = [0, 0, 0, 1]; }
@@ -265,6 +265,9 @@ found in the LICENSE file.
           // If this is a gamepad without a pose set it out in front of us so
           // we can see it.
           position = isGamepad ? [0.1, -0.1, -0.5] : [0, 0, 0];
+          if (isGamepad && index >= 0) {
+            position[0] += Math.floor((index+1)/2)*0.5*((index % 2 == 0) ? 1 : -1);
+          }
         }
 
         if (vrDisplay.stageParameters) {
@@ -291,11 +294,13 @@ found in the LICENSE file.
           // the same transformation to the gamepad pose as we did the
           // VRDisplay's pose.
           if (gamepad.pose) {
-            getPoseMatrix(gamepadMat, gamepad.pose, true);
+            //console.log("pose!!! " + i);
+            getPoseMatrix(gamepadMat, gamepad.pose, true, i);
           }
           else {
             // not VR gamepad, use identity pose
-            getPoseMatrix(gamepadMat, { orientation:null, position:null}, true);
+            //console.log("no pose " + i);
+            getPoseMatrix(gamepadMat, { orientation:null, position:null}, true, i);
           }
 
           // Loop through all the gamepad's axes and scale the gamepad geometry
@@ -369,11 +374,19 @@ found in the LICENSE file.
           vrDisplay.requestAnimationFrame(onAnimationFrame);
 
           var gamepads = navigator.getGamepads();
+          //console.log(">>>> gamepads " + gamepads + " type " + typeof(gamepads));
+          var gamepadsArr = new Array(gamepads.length);
           for (var i = 0; i < gamepads.length; ++i) {
             var gamepad = gamepads[i];
+            gamepadsArr[i] = gamepad;
             // The array may contain undefined gamepads, so check for that as
             // well as a non-null pose.
             if (gamepad) {
+              if (gamepad.pose && i != 0) {
+                gamepadsArr[i] = gamepadsArr[0];
+                gamepadsArr[0] = gamepad;
+                //console.log("swapping gamepad " + i + " with 0 since it has pose");
+              }
               if ("hapticActuators" in gamepad && gamepad.hapticActuators.length > 0) {
                 for (var j = 0; j < gamepad.buttons.length; ++j) {
                   if (gamepad.buttons[j].pressed) {
@@ -392,18 +405,18 @@ found in the LICENSE file.
           if (vrDisplay.isPresenting) {
             gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
             getStandingViewMatrix(viewMat, frameData.leftViewMatrix);
-            renderSceneView(frameData.leftProjectionMatrix, viewMat, gamepads);
+            renderSceneView(frameData.leftProjectionMatrix, viewMat, gamepadsArr);
 
             gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
             getStandingViewMatrix(viewMat, frameData.rightViewMatrix);
-            renderSceneView(frameData.rightProjectionMatrix, viewMat, gamepads);
+            renderSceneView(frameData.rightProjectionMatrix, viewMat, gamepadsArr);
 
             vrDisplay.submitFrame();
           } else {
             gl.viewport(0, 0, webglCanvas.width, webglCanvas.height);
             mat4.perspective(projectionMat, Math.PI*0.4, webglCanvas.width / webglCanvas.height, 0.1, 1024.0);
             getStandingViewMatrix(viewMat, frameData.leftViewMatrix);
-            renderSceneView(projectionMat, viewMat, gamepads);
+            renderSceneView(projectionMat, viewMat, gamepadsArr);
             stats.renderOrtho();
           }
         } else {
