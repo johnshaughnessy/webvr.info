@@ -36,6 +36,7 @@ found in the LICENSE file.
 
       var vrPresentButton = null;
       var is_multiview = false;
+      var multiviewSupported = false;
 
       var webglCanvas = document.getElementById("webgl-canvas");
       var glAttribs = {
@@ -52,13 +53,15 @@ found in the LICENSE file.
         return;
       }
       var ext = gl.getExtension('WEBGL_multiview');
-      if (ext) 
+      if (ext) {
         console.log("MULTIVIEW extension is supported");
+        multiviewSupported = true;
+      }
       else
         console.log("MULTIVIEW extension is NOT supported");
 
-      webglCanvas.width = 1024;
-      webglCanvas.height = 1024;
+//      webglCanvas.width = 1024;
+//      webglCanvas.height = 1024;
 
       gl.clearColor(0.1, 0.2, 0.3, 1.0);
       gl.enable(gl.DEPTH_TEST);
@@ -454,7 +457,11 @@ found in the LICENSE file.
       function onVRRequestPresent () {
         console.log("onVRRequestPresent begin");
         // This can only be called in response to a user gesture.
-        vrDisplay.requestPresent([{ source: webglCanvas }]).then(function () {
+        var attributes = {
+          depth: true,
+          multiview: multiviewSupported,
+        };
+        vrDisplay.requestPresent([{ source: webglCanvas, attributes: attributes}]).then(function () {
           // Nothing to do because we're handling things in onVRPresentChange.
         }, function (err) {
           var errMsg = "requestPresent failed.";
@@ -545,10 +552,6 @@ found in the LICENSE file.
             // before adding UI that advertises VR features.
             if (vrDisplay.capabilities.canPresent)
               vrPresentButton = VRSamplesUtil.addButton("Enter VR", "E", "media/icons/cardboard64.png", onVRRequestPresent);
-
-            // For the benefit of automated testing. Safe to ignore.
-            if (vrDisplay.capabilities.canPresent && WGLUUrl.getBool('canvasClickPresents', false))
-              webglCanvas.addEventListener("click", onVRRequestPresent, false);
 
             // The UA may kick us out of VR present mode for any reason, so to
             // ensure we always know when we begin/end presenting we need to
