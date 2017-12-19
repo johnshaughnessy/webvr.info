@@ -649,6 +649,10 @@ found in the LICENSE file.
                 }
                 renderFrame(gl, viewports[0], frameData.leftProjectionMatrix, frameData.leftViewMatrix, viewports[1], frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, 2);
               }
+
+              // If we're currently presenting to the VRDisplay we need to
+              // explicitly indicate we're done rendering.
+              vrDisplay.submitFrame();
             }
             else {
               var leftVP =  { x: 0, y: 0, width:webglCanvas.width * 0.5, height:webglCanvas.height };
