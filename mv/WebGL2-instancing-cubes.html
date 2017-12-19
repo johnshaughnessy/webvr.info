@@ -89,7 +89,7 @@ found in the LICENSE file.
       gl.enable(gl.CULL_FACE);
 
       var vertexShaderSource = "#version 300 es\n";
-      if (!multiview) {
+      if (!multiviewSupported) {
         vertexShaderSource += "#define DISABLE_MULTIVIEW 1\n";
       }
       vertexShaderSource +=
@@ -97,8 +97,8 @@ found in the LICENSE file.
         #define DISABLE_MULTIVIEW 0
        #endif
       #define NUM_VIEWS 2
-      #if defined( GL_OVR_multiview2 ) && ! DISABLE_MULTIVIEW
-        #extension GL_OVR_multiview2 : enable
+      #if !DISABLE_MULTIVIEW
+        #extension GL_OVR_multiview : enable
         layout(num_views=NUM_VIEWS) in;
         #define VIEW_ID gl_ViewID_OVR
       #else
@@ -682,7 +682,7 @@ found in the LICENSE file.
               var leftVP =  { x: 0, y: 0, width:webglCanvas.width * 0.5, height:webglCanvas.height };
               var rightVP = { x: webglCanvas.width * 0.5, y: 0, width:webglCanvas.width * 0.5, height:webglCanvas.height };
 
-              renderFrame(gl, leftVP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, rightVP, frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, (multiview) ? 1 : 2);
+              renderFrame(gl, leftVP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, rightVP, frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, 2);
 
               // If we're currently presenting to the VRDisplay we need to
               // explicitly indicate we're done rendering.
