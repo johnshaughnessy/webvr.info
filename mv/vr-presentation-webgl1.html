@@ -240,19 +240,19 @@ found in the LICENSE file.
       function onResize () {
         if (vrDisplay && vrDisplay.isPresenting) {
           if (!is_multiview) {
-          // If we're presenting we want to use the drawing buffer size
-          // recommended by the VRDevice, since that will ensure the best
-          // results post-distortion.
-          var leftEye = vrDisplay.getEyeParameters("left");
-          var rightEye = vrDisplay.getEyeParameters("right");
+            // If we're presenting we want to use the drawing buffer size
+            // recommended by the VRDevice, since that will ensure the best
+            // results post-distortion.
+            var leftEye = vrDisplay.getEyeParameters("left");
+            var rightEye = vrDisplay.getEyeParameters("right");
 
-          // For simplicity we're going to render both eyes at the same size,
-          // even if one eye needs less resolution. You can render each eye at
-          // the exact size it needs, but you'll need to adjust the viewports to
-          // account for that.
-          webglCanvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * ((is_multiview) ? 1 : 2);
-          webglCanvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
-          console.log("onResize, presenting, multiview = " + is_multiview + ", new size = " + webglCanvas.width + "x" + webglCanvas.height);
+            // For simplicity we're going to render both eyes at the same size,
+            // even if one eye needs less resolution. You can render each eye at
+            // the exact size it needs, but you'll need to adjust the viewports to
+            // account for that.
+            webglCanvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * ((is_multiview) ? 1 : 2);
+            webglCanvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
+            console.log("onResize, presenting, multiview = " + is_multiview + ", new size = " + webglCanvas.width + "x" + webglCanvas.height);
           }
           else {
             console.log("onResize is skipped, multiview = " + is_multiview);

@@ -599,19 +599,24 @@ found in the LICENSE file.
 
       function onResize () {
         if (vrDisplay && vrDisplay.isPresenting) {
-          // If we're presenting we want to use the drawing buffer size
-          // recommended by the VRDevice, since that will ensure the best
-          // results post-distortion.
-          var leftEye = vrDisplay.getEyeParameters("left");
-          var rightEye = vrDisplay.getEyeParameters("right");
+          if (!is_multiview) {
+            // If we're presenting we want to use the drawing buffer size
+            // recommended by the VRDevice, since that will ensure the best
+            // results post-distortion.
+            var leftEye = vrDisplay.getEyeParameters("left");
+            var rightEye = vrDisplay.getEyeParameters("right");
 
-          // For simplicity we're going to render both eyes at the same size,
-          // even if one eye needs less resolution. You can render each eye at
-          // the exact size it needs, but you'll need to adjust the viewports to
-          // account for that.
-          webglCanvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * ((is_multiview) ? 1 : 2);
-          webglCanvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
-          console.log("onResize, presenting, multiview = " + is_multiview + ", new size = " + webglCanvas.width + "x" + webglCanvas.height);
+            // For simplicity we're going to render both eyes at the same size,
+            // even if one eye needs less resolution. You can render each eye at
+            // the exact size it needs, but you'll need to adjust the viewports to
+            // account for that.
+            webglCanvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2;
+            webglCanvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
+            console.log("onResize, presenting, multiview = " + is_multiview + ", new size = " + webglCanvas.width + "x" + webglCanvas.height);
+          }
+          else {
+            console.log("onResize is skipped, multiview = " + is_multiview);
+          }
         } else {
           // We only want to change the size of the canvas drawing buffer to
           // match the window dimensions when we're not presenting.
@@ -627,6 +632,7 @@ found in the LICENSE file.
         console.log("[" + evt.type + "] VR Display: " + evt.display.displayName + ", Reason: " + evt.reason);
       }
 
+      var reported = false;
       function onAnimationFrame (t) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -655,10 +661,14 @@ found in the LICENSE file.
             // When presenting render a stereo view.
 
             var views = vrDisplay.getViews ? vrDisplay.getViews() : [];
-            console.log("views: " + vrDisplay.getViews);
+            //console.log("views: " + vrDisplay.getViews);
             if (views.length > 0) {
               if (views[0].getAttributes().multiview) {
                 // We should have only one view in MV case
+                if (!reported) {
+                  console.log("Rendering with multiview!");
+                  reported = true;
+                }
                 var view = views[0];
                 var viewport = view.getViewport();
                 gl.bindFramebuffer(gl.FRAMEBUFFER, view.framebuffer);
@@ -695,6 +705,7 @@ found in the LICENSE file.
             var VP =  { x: 0, y: 0, width:webglCanvas.width, height:webglCanvas.height };
             renderFrame(gl, VP, projMatrix, viewMatrix, VP, projMatrix, viewMatrix, t, 1);
 
+            reported = false;
           }
         } else {
           //console.log("vrDisplay = " + vrDisplay);
