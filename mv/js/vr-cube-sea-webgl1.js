@@ -50,7 +50,9 @@ window.VRCubeSea = (function () {
     "varying vec2 vTexCoord;",
 
     "void main() {",
-    "  gl_FragColor = texture2D(diffuse, vTexCoord);",
+    "  vec4 color = texture2D(diffuse, vTexCoord);",
+    "  color.r = 1.0; color.g *= 0.8; color.b *= 0.7;", // indicate that Multiview is not in use, for testing
+    "  gl_FragColor = color;",
     "}",
   ].join("\n");
 
