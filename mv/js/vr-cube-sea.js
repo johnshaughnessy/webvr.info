@@ -191,6 +191,7 @@ window.VRCubeSea = (function () {
     mortimer[i] = a[i];
   }
 
+  var mvrenReported = false;
   CubeSea.prototype.render = function (projectionMat, modelViewMat, stats, multiview) {
     var gl = this.gl;
     var program = this.program;
@@ -198,7 +199,10 @@ window.VRCubeSea = (function () {
     //mat4.invert(mortimer, modelViewMat);
 
     if (multiview) {
-      console.log("render multiview");
+      if (!mvrenReported) {
+        console.log("render multiview");
+        mvrenReported = true;
+      }
       program = this.program_multiview;
       program.use();
       gl.uniformMatrix4fv(program.uniform.leftProjectionMat, false, projectionMat[0]);
@@ -207,6 +211,7 @@ window.VRCubeSea = (function () {
       gl.uniformMatrix4fv(program.uniform.rightModelViewMat, false, modelViewMat[1]);
     }
     else {
+      mvrenReported = false;
       program.use();
       gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
       gl.uniformMatrix4fv(program.uniform.modelViewMat, false, modelViewMat);
