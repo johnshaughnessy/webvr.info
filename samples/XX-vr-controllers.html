@@ -335,7 +335,6 @@ found in the LICENSE file.
             }
             else if (j == 1 && gamepad.buttons[j].pressed) {
               vec4.set(gamepadColor, gamepad.buttons[j].value, touched, 0.5, 1);
-              break;
             }
             else if (gamepad.buttons[j].value != 0.0 || gamepad.buttons[j].pressed) {
               vec4.set(gamepadColor, gamepad.buttons[j].value, touched, gamepad.buttons[j].pressed, 1);
