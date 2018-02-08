@@ -106,6 +106,7 @@ found in the LICENSE file.
       var cubeIsland = null;
       var stats = null;
       var debugGeom = null;
+      var previousNumOfGamepads = 0;
 
       function initWebGL (preserveDrawingBuffer) {
         var glAttribs = {
@@ -281,9 +282,13 @@ found in the LICENSE file.
 
         debugGeom.bind(projection, view);
 
+        var printNames = (gamepads.length != previousNumOfGamepads);
         // Render every gamepad with a pose we found
         for (var i = 0; i < gamepads.length; ++i) {
           var gamepad = gamepads[i];
+          if (gamepad != null && printNames) {
+            console.log("Found controller: '" + gamepad.id + "', connected = " gampead.connected);
+          }
 
           // Because this sample is done in standing space we need to apply
           // the same transformation to the gamepad pose as we did the
@@ -350,6 +355,7 @@ found in the LICENSE file.
 
           debugGeom.drawBoxWithMatrix(gamepadMat, gamepadColor);
         }
+        previousNumOfGamepads = gamepads.length;
       }
 
       function onAnimationFrame (t) {
