@@ -146,6 +146,9 @@ found in the LICENSE file.
         };
         vrDisplay.requestPresent([{ source: webglCanvas, attributes: attributes}]).then(function () {
           // Nothing to do because we're handling things in onVRPresentChange.
+          console.log("highRefreshRate = " + vrDisplay.getLayers()[0].attributes.highRefreshRate);
+          console.log("foveationLevel = " + vrDisplay.getLayers()[0].attributes.foveationLevel);
+          console.log("floorLevel = " + vrDisplay.getLayers()[0].attributes.floorLevelTransform);
         }, function (err) {
           var errMsg = "requestPresent failed.";
           if (err && err.message) {
