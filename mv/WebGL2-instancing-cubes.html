@@ -62,10 +62,10 @@ found in the LICENSE file.
       var webglCanvas = document.getElementById("webgl-canvas");
       var glAttribs = {
         alpha: false,
-        depth: true,
+        depth: false,
         stencil: false,
         preserveDrawingBuffer : false,
-        antialias : true
+        antialias : false
       };
       var gl = null;
       gl = webglCanvas.getContext("webgl2", glAttribs);
@@ -480,6 +480,7 @@ found in the LICENSE file.
         // This can only be called in response to a user gesture.
         var attributes = {
           depth: true,
+          antialias: true,
           multiview: multiviewSupported,
         };
         vrDisplay.requestPresent([{ source: webglCanvas, attributes: attributes}]).then(function () {
