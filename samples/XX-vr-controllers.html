@@ -284,10 +284,14 @@ found in the LICENSE file.
 
         var printNames = (gamepads.length != previousNumOfGamepads);
         // Render every gamepad with a pose we found
+        var controller_found = false;
         for (var i = 0; i < gamepads.length; ++i) {
           var gamepad = gamepads[i];
           if (gamepad != null && printNames) {
             console.log("Found controller: '" + gamepad.id + "', connected = "+ gamepad.connected);
+          }
+          if (gamepad.id == "Gear VR Controller" || gamepad.id == "Oculus Go Controller" || gamepad.id == "Oculus Monterey Controller") {
+             controller_found = true;
           }
 
           // Because this sample is done in standing space we need to apply
@@ -354,6 +358,9 @@ found in the LICENSE file.
           debugGeom.drawBoxWithMatrix(gamepadMat, gamepadColor);
         }
         previousNumOfGamepads = gamepads.length;
+        if (!controller_found) {
+           VRSamplesUtil.addError("No Oculus / GearVR controller found!", 20000);
+        }
       }
 
       function onAnimationFrame (t) {
