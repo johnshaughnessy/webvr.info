@@ -358,7 +358,7 @@ found in the LICENSE file.
           debugGeom.drawBoxWithMatrix(gamepadMat, gamepadColor);
         }
         previousNumOfGamepads = gamepads.length;
-        if (!controller_found) {
+        if (vrDisplay.isPresenting && !controller_found) {
            VRSamplesUtil.addError("No Oculus / GearVR controller found!", 20000);
         }
       }
