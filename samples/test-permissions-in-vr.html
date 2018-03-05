@@ -282,6 +282,9 @@ found in the LICENSE file.
               Math.random() * 0.5,
               Math.random() * 0.5,
               Math.random() * 0.5, 1.0);
+          navigator.mediaDevices.getUserMedia({audio: true}, function(stream) {
+            console.log("Mic!");
+          }, function() {console.log("Err!");});
         }
       }
       webglCanvas.addEventListener("click", onClick, false);
