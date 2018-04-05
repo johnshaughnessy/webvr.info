@@ -61,11 +61,12 @@ found in the LICENSE file.
 
       var webglCanvas = document.getElementById("webgl-canvas");
       var glAttribs = {
-        alpha: false,
-        depth: false,
+        alpha: true,
+        depth: true,
         stencil: false,
         preserveDrawingBuffer : false,
-        antialias : false
+        antialias : false,
+        samples : 2
       };
       var gl = null;
       gl = webglCanvas.getContext("webgl2", glAttribs);
@@ -73,7 +74,7 @@ found in the LICENSE file.
         VRSamplesUtil.addError("Can't crate WebGL2 context");
         return;
       }
-      var ext = gl.getExtension('WEBGL_multiview');
+//      var ext = gl.getExtension('WEBGL_multiview');
     /*  if (ext) {
         console.log("MULTIVIEW extension is supported");
         multiviewSupported = true;
@@ -90,10 +91,6 @@ found in the LICENSE file.
 
       var vertexShaderSource = 
       "#version 300 es\n"+
-      "#extension GL_OVR_multiview : require\n"+
-      "#define NUM_VIEWS 2\n"+
-      "layout(num_views=NUM_VIEWS) in;\n"+
-      "#define VIEW_ID gl_ViewID_OVR\n"+
 //      "uniform vec2 u_offset;\n"+
 //      "uniform vec2 u_scale;\n"+
 //      "out mediump vec2 v_texcoord;\n"+
@@ -157,9 +154,10 @@ found in the LICENSE file.
 	"{\n"+
 
     "   highp vec2 dx = dFdx(gl_FragCoord.xy), dy = dFdy(gl_FragCoord.xy);\n"+
-    "   highp float levelX = floor(0.5 * log2(dot(dx, dx)));\n"+
-    "   highp float levelY = floor(0.5 * log2(dot(dy, dy)));\n" +
-    "   highp vec4 color = vec4(0.0, 0.0, 0.0, 1.0);\n"+
+    "   highp float levelX = floor(0.5*log2(dot(dx, dx)));\n"+
+    "   highp float levelY = floor(0.5*log2(dot(dy, dy)));\n" +
+    "   lowp vec4 color = vec4(0.0, 0.0, 0.0, 1.0);\n"+
+//    "   outColor =  vec4(levelX / 2.0, levelY / 2.0, 1.0, 1.0);\n"+
     "   if ((levelX == 0.0) && (levelY == 0.0)) {\n"+
     "       color = vec4(1.0, 1.0, 1.0, 1.0);\n"+               //  1:1 = White
     "   } else if ((levelX == 1.0) && (levelY == 0.0)) {\n"+
@@ -172,7 +170,6 @@ found in the LICENSE file.
     "       color = vec4(1.0, 0.0, 1.0, 1.0);\n"+               //  1:16 = Purple
     "   }\n"+
     "	outColor = color;\n"+
-//    "	outColor = vec4(1.0, 1.0, 0.0, 1.0);\n"+
 	"}\n";
 /*
       `#version 300 es
@@ -734,7 +731,7 @@ console.log(fragmentShaderSource);
 
             var views = vrDisplay.getViews ? vrDisplay.getViews() : [];
             //console.log("views: " + vrDisplay.getViews);
-            if (views.length > 0) {
+            if (views && views.length > 0) {
               if (views[0].getAttributes().multiview) {
                 // We should have only one view in MV case
                 if (!reported) {
@@ -747,13 +744,9 @@ console.log(fragmentShaderSource);
                 renderFrame(gl, viewport, frameData.leftProjectionMatrix, frameData.leftViewMatrix, viewport, frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, 1);
               }
               else {
-                var viewports = [];
-                for (var i = 0; i < views.length; ++i) {
-                  var view = views[i];
-                  var viewport = view.getViewport();
-                  viewports.push(viewport);
-                }
-                renderFrame(gl, viewports[0], frameData.leftProjectionMatrix, frameData.leftViewMatrix, viewports[1], frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, 2);
+                //renderFrame(gl, viewports[0], frameData.leftProjectionMatrix, frameData.leftViewMatrix, viewports[1], frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, 2);
+                var VP =  { x: 0, y: 0, width:webglCanvas.width, height:webglCanvas.height };
+                renderFrame(gl, VP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, VP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, t, 1);
               }
 
               // If we're currently presenting to the VRDisplay we need to
@@ -761,10 +754,8 @@ console.log(fragmentShaderSource);
               vrDisplay.submitFrame();
             }
             else {
-              var leftVP =  { x: 0, y: 0, width:webglCanvas.width * 0.5, height:webglCanvas.height };
-              var rightVP = { x: webglCanvas.width * 0.5, y: 0, width:webglCanvas.width * 0.5, height:webglCanvas.height };
-
-              renderFrame(gl, leftVP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, rightVP, frameData.rightProjectionMatrix, frameData.rightViewMatrix, t, 2);
+                var VP =  { x: 0, y: 0, width:webglCanvas.width, height:webglCanvas.height };
+                renderFrame(gl, VP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, VP, frameData.leftProjectionMatrix, frameData.leftViewMatrix, t, 1);
 
               // If we're currently presenting to the VRDisplay we need to
               // explicitly indicate we're done rendering.
