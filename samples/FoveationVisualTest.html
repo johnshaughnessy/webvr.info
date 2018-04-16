@@ -65,8 +65,8 @@ found in the LICENSE file.
         depth: true,
         stencil: false,
         preserveDrawingBuffer : false,
-        antialias : false,
-        samples : 2
+        antialias : true,
+        ovr_samples : 4
       };
       var gl = null;
       gl = webglCanvas.getContext("webgl2", glAttribs);
