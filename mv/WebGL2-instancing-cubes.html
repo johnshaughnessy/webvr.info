@@ -50,7 +50,7 @@ found in the LICENSE file.
       "use strict";
 
       var vrDisplay = null;
-      const NUM_INSTANCES = 5000;
+      const NUM_INSTANCES = 2000;
       const NUM_ROTATIONS = 16;
       var multiview = 0;
       var frameData = null;
@@ -61,11 +61,11 @@ found in the LICENSE file.
 
       var webglCanvas = document.getElementById("webgl-canvas");
       var glAttribs = {
-        alpha: false,
-        depth: false,
+        alpha: true,
+        depth: true,
         stencil: false,
         preserveDrawingBuffer : false,
-        antialias : false
+        antialias : true
       };
       var gl = null;
       gl = webglCanvas.getContext("webgl2", glAttribs);
