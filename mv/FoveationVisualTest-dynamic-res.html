@@ -710,8 +710,8 @@ console.log(fragmentShaderSource);
           // doesn't require a user gesture.
           vrDisplay.requestPresent([{
             source: webglCanvas,
-            leftBounds: [0.0, 0.0, boundsWidth, boundsHeight],
-            rightBounds: [boundsWidth, 0.0, boundsWidth, boundsHeight],
+            leftBounds: [0.25 - boundsWidth*0.5, 0.5 - boundsHeight*0.5, boundsWidth, boundsHeight],
+            rightBounds: [0.5 + 0.25 - boundsWidth*0.5, 0.5 - boundsHeight*0.5, boundsWidth, boundsHeight],
           }]);
         }
         else {
@@ -729,8 +729,8 @@ console.log(fragmentShaderSource);
           vrDisplay.requestPresent([{
             source: webglCanvas,
             attributes: attributes,
-            leftBounds: [0.0, 0.0, boundsWidth, boundsHeight],
-            rightBounds: [0.0, 0.0, boundsWidth, boundsHeight],
+            leftBounds:  [0.5 - boundsWidth*0.5, 0.5 - boundsHeight*0.5, boundsWidth, boundsHeight],
+            rightBounds: [0.5 - boundsWidth*0.5, 0.5 - boundsHeight*0.5, boundsWidth, boundsHeight],
           }]);
         }
       }
