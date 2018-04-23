@@ -790,11 +790,11 @@ console.log(fragmentShaderSource);
           //          console.log("vrDisplay.isPresenting = " + vrDisplay.isPresenting + " fov = " + (Math.atan2(1.0, frameData.leftProjectionMatrix[5]) * 360 / Math.PI));
           if (vrDisplay.isPresenting) {
             // When presenting render a stereo view.
-            adjustResolution();
+            adjustResolution(t, is_multiview);
 
             var views = vrDisplay.getViews ? vrDisplay.getViews() : [];
             //console.log("views: " + vrDisplay.getViews);
-            if (views.length > 0) {
+            if (views != null && views.length > 0) {
               if (views[0].getAttributes().multiview) {
                 // We should have only one view in MV case
                 if (!reported) {
