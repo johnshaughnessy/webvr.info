@@ -297,13 +297,6 @@ found in the LICENSE file.
             rightBounds: [0.0, 0.0, boundsWidth, boundsHeight],
           }]);
         }
-
-        // To ensure our mirrored content also shows up correctly we'll scale
-        // the canvas display size to be scaled appropriately such that it
-        // continues to only show one eye.
-       // webglCanvas.style.width = (1.0/resolutionMultiplier) * 200 + "%";
-     //   webglCanvas.style.height = (1.0/resolutionMultiplier) * 100 + "%";
-        //webglCanvas.style.marginTop = ((eyeHeight - webglCanvas.height)* resolutionMultiplier) + "px";
       }
 
       function onAnimationFrame (t) {
