@@ -11,7 +11,7 @@ found in the LICENSE file.
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>FOVEATION</title>
+    <title>FOVEATION MV DYNRES</title>
     <style>
       #webgl-canvas, #presenting-message {
         box-sizing: border-box;
@@ -679,7 +679,7 @@ console.log(fragmentShaderSource);
 
       var resolutionMultiplier = 1.0;
       var eyeWidth, eyeHeight;
-      var lastAdjustment = Date.now()-1000;
+      var lastAdjustment = 0;
 
       function adjustResolution(t, multiview) {
         // Update the resolution every quarter second
