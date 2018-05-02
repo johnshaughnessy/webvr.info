@@ -101,7 +101,8 @@ found in the LICENSE file.
       var webglCanvas = document.getElementById("webgl-canvas");
       var glAttribs = {
         alpha: false,
-        antialias: true //!VRSamplesUtil.isMobile()
+        antialias: true, //!VRSamplesUtil.isMobile()
+        preserveDrawingBuffer: true
       };
       var gl = webglCanvas.getContext("webgl", glAttribs);
       if (!gl) {
