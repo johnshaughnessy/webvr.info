@@ -302,14 +302,10 @@ found in the LICENSE file.
              controller_found = true;
           }
 
-          if (gamepad.pose) {
-            // Because this sample is done in standing space we need to apply
-            // the same transformation to the gamepad pose as we did the
-            // VRDisplay's pose.
-            getPoseMatrix(gamepadMat, gamepad.pose, gamepad.hand);
-          } else {
-            mat4.identity(gamepadMat);
-          }
+          // Because this sample is done in standing space we need to apply
+          // the same transformation to the gamepad pose as we did the
+          // VRDisplay's pose.
+          getPoseMatrix(gamepadMat, gamepad.pose, gamepad.hand);
 
           // Loop through all the gamepad's axes and scale the gamepad geometry
           // by their value.
