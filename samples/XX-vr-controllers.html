@@ -392,7 +392,7 @@ found in the LICENSE file.
             // The array may contain undefined gamepads, so check for that as
             // well as a non-null pose.
             if (gamepad) {
-              if (gamepad.pose)
+              if (gamepad.pose || gamepad.id.startsWith("Gear VR")) // incl Gear VR Touchpad
                 vrGamepads.push(gamepad);
 
               if ("hapticActuators" in gamepad && gamepad.hapticActuators.length > 0) {
