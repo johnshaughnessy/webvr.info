@@ -92,7 +92,6 @@ found in the LICENSE file.
       (function () {
       "use strict";
 
-      history.pushState(null, null, location.href);
       window.onpopstate = function () {
         console.log("BACK is prevented!");
         history.go(1);
@@ -155,6 +154,7 @@ found in the LICENSE file.
         // This can only be called in response to a user gesture.
         vrDisplay.requestPresent([{ source: webglCanvas }]).then(function () {
           // Nothing to do because we're handling things in onVRPresentChange.
+          history.pushState(null, null, location.href);
         }, function (err) {
           var errMsg = "requestPresent failed.";
           if (err && err.message) {
