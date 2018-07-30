@@ -95,6 +95,7 @@ found in the LICENSE file.
       window.onpopstate = function () {
         console.log("BACK is prevented!");
         history.go(1);
+		history.pushState(null, null, location.href);
       };
 
       var PLAYER_HEIGHT = 1.65;
