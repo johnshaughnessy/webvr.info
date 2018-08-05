@@ -165,7 +165,6 @@ found in the LICENSE file.
 
       function onVRRequestPresent () {
         vrDisplay.requestPresent([{ source: webglCanvas }]).then(function () {
-          updateStage();
         }, function (err) {
           var errMsg = "requestPresent failed.";
           if (err && err.message) {
@@ -199,6 +198,7 @@ found in the LICENSE file.
             vrPresentButton = VRSamplesUtil.addButton("Enter VR", "E", "media/icons/cardboard64.png", onVRRequestPresent);
           }
         }
+        updateStage();
       }
 
       if (navigator.getVRDisplays) {
