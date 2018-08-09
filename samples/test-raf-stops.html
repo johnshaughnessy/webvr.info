@@ -183,8 +183,8 @@ found in the LICENSE file.
         // recommended dimensions for the display.
         onResize();
 
+        startTime = performance.now();
         if (vrDisplay.isPresenting) {
-          startTime = performance.now();
           if (vrDisplay.capabilities.hasExternalDisplay) {
             // Because we're not mirroring any images on an external screen will
             // freeze while presenting. It's better to replace it with a message
