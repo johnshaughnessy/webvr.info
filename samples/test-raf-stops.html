@@ -306,7 +306,7 @@ found in the LICENSE file.
           // refresh rate if it differs from the refresh rate of the main
           // display. Calling VRDisplay.requestAnimationFrame ensures we render
           // at the right speed for VR.
-          if (!vrDisplay.isPresenting || (performance.now() - startTime) / 1000000000.0 < 5.0) { // rAF stops after 5 secs
+          if (!vrDisplay.isPresenting || (performance.now() - startTime) / 1000.0 < 5.0) { // rAF stops after 5 secs
             vrDisplay.requestAnimationFrame(onAnimationFrame);
           }
 
