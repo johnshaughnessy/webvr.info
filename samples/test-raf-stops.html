@@ -205,6 +205,12 @@ found in the LICENSE file.
             VRSamplesUtil.removeButton(vrPresentButton);
             vrPresentButton = VRSamplesUtil.addButton("Enter VR", "E", "media/icons/cardboard64.png", onVRRequestPresent);
           }
+
+          console.log("Restarting rAF");
+          if (vrDisplay != null) 
+            vrDisplay.requestAnimationFrame(onAnimationFrame);
+          else 
+            window.requestAnimationFrame(onAnimationFrame);
         }
         console.log("onVRPresentChange end");
       }
@@ -308,6 +314,9 @@ found in the LICENSE file.
           // at the right speed for VR.
           if (!vrDisplay.isPresenting || (performance.now() - startTime) / 1000.0 < 5.0) { // rAF stops after 5 secs
             vrDisplay.requestAnimationFrame(onAnimationFrame);
+          }
+          else {
+            console.log("STOPPING rAF as a part of the test");
           }
 
           // As a general rule you want to get the pose as late as possible
