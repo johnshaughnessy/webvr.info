@@ -260,8 +260,8 @@ found in the LICENSE file.
         } else {
           // We only want to change the size of the canvas drawing buffer to
           // match the window dimensions when we're not presenting.
-          webglCanvas.width = window.innerWidth * window.devicePixelRatio * 2;
-          webglCanvas.height = window.innerHeight * window.devicePixelRatio * 2;
+          webglCanvas.width = window.innerWidth * window.devicePixelRatio;
+          webglCanvas.height = window.innerHeight * window.devicePixelRatio;
         }
       }
       window.addEventListener("resize", onResize, false);
