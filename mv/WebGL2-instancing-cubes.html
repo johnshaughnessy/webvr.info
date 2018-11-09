@@ -70,7 +70,7 @@ found in the LICENSE file.
       var gl = null;
       gl = webglCanvas.getContext("webgl2", glAttribs);
       if (!gl) {
-        VRSamplesUtil.addError("Can't crate WebGL2 context");
+        VRSamplesUtil.addError("Can't create WebGL2 context");
         return;
       }
       var ext = gl.getExtension('WEBGL_multiview');
@@ -111,12 +111,12 @@ found in the LICENSE file.
       uniform SceneMatrices
       {
          uniform mat4 ViewMatrix[NUM_VIEWS];
-         uniform mat4 ProjectionMatrix;
+         uniform mat4 ProjectionMatrix[NUM_VIEWS];
       } sm;
       out vec4 fragmentColor;
       void main()
       {
-         gl_Position  = sm.ProjectionMatrix * ( sm.ViewMatrix[VIEW_ID] * ( vertexTransform * vec4( vertexPosition, 1.0 ) ) );
+         gl_Position  = sm.ProjectionMatrix[VIEW_ID] * ( sm.ViewMatrix[VIEW_ID] * ( vertexTransform * vec4( vertexPosition, 1.0 ) ) );
          fragmentColor = vertexColor;
       }`;
 
