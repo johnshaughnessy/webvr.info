@@ -21,10 +21,9 @@ window.VRCubeSea = (function () {
   ].join("\n");
 
   var cubeSeaVSMultiview = [
-    "#version 300 es",
     "#extension GL_OVR_multiview : require",
     "#define NUM_VIEWS 2",
-    "layout(num_views=NUM_VIEWS) in;",
+//    "layout(num_views=NUM_VIEWS) in;",
     "#define VIEW_ID gl_ViewID_OVR",
     "uniform mat4 leftProjectionMat;",
     "uniform mat4 leftModelViewMat;",
@@ -33,13 +32,13 @@ window.VRCubeSea = (function () {
 //    "attribute vec3 position;",
   //  "attribute vec2 texCoord;",
   //  "varying vec2 vTexCoord;",
-    "in vec3 position;",
-    "in vec2 texCoord;",
-    "out vec2 vTexCoord;",
+    "attribute vec3 position;",
+    "attribute vec2 texCoord;",
+    "varying vec2 vTexCoord;",
 
     "void main() {",
     "  vTexCoord = texCoord;",
-    "  mat4 m = VIEW_ID == 0u ? (leftProjectionMat * leftModelViewMat) : (rightProjectionMat * rightModelViewMat);",
+    "  mat4 m = VIEW_ID == 0 ? (leftProjectionMat * leftModelViewMat) : (rightProjectionMat * rightModelViewMat);",
     "  gl_Position = m * vec4( position, 1.0 );",
     "}",
   ].join("\n");
@@ -57,19 +56,18 @@ window.VRCubeSea = (function () {
   ].join("\n");
 
   var cubeSeaFSMultiview = [
-    "#version 300 es",
     "precision mediump float;",
     "uniform sampler2D diffuse;",
-    "in vec2 vTexCoord;",
-    "out vec4 color;",
+    "varying vec2 vTexCoord;",
 
     "void main() {",
-    "  color = texture(diffuse, vTexCoord);",
+    "  gl_FragColor = texture2D(diffuse, vTexCoord);",
     "}",
   ].join("\n");
 
 
-  var CubeSea = function (gl, texture) {
+  var CubeSea = function (gl, texture, _gridSize) {
+    var gridSize = (_gridSize) ? _gridSize : 10;
     this.gl = gl;
 
     this.statsMat = mat4.create();
@@ -166,8 +164,6 @@ window.VRCubeSea = (function () {
       cubeVerts.push(x + size, y + size, z + size, 1.0, 0.0);
       cubeVerts.push(x - size, y + size, z + size, 0.0, 0.0);
     }
-
-    var gridSize = 10;
 
     // Build the cube sea
     for (var x = 0; x < gridSize; ++x) {
