@@ -207,7 +207,25 @@ window.VRPanorama = (function () {
     return false;
   };
 
-  Panorama.prototype.render = function (projectionMat, modelViewMat) {
+  Panorama.prototype.preloadTexture = function (is_webgl2) {
+    if (!this.imgElement && !this.videoElement)
+      return;
+
+    var gl = this.gl;
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+    if (this.videoElement && !this.videoElement.paused) {
+      if (is_webgl2) {
+        gl.invalidateFramebuffer(gl.FRAMEBUFFER, [ gl.COLOR_ATTACHMENT0, gl.DEPTH_ATTACHMENT]);
+      }
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, this.videoElement);
+      // Clear supposed to happen after preloadTexture call
+      //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    }
+  }
+
+  Panorama.prototype.render = function (projectionMat, modelViewMat, is_preloaded) {
     var gl = this.gl;
     var program = this.program;
 
@@ -232,7 +250,7 @@ window.VRPanorama = (function () {
     gl.uniform1i(this.program.uniform.diffuse, 0);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
-    if (this.videoElement && !this.videoElement.paused) {
+    if (!is_preloaded && this.videoElement && !this.videoElement.paused) {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, this.videoElement);
     }
 

@@ -78,6 +78,9 @@ found in the LICENSE file.
       var viewMat = mat4.create();
       var vrPresentButton = null;
 
+      var is_webgl2 = true;    // To use invalidateFramebuffer for best perf
+      var is_preloaded = true; // For best perf kepp it TRUE!
+
       // ================================================================
       // WebGL and WebAudio scene setup. This code is not WebVR specific.
       // ================================================================
@@ -107,9 +110,9 @@ found in the LICENSE file.
       function getDefaultVideo() {
         const video = document.createElement( "video" );
         if(video.canPlayType('video/mp4; codecs="mp4v.20.8"')) {
-          return "media/textures/vr_bench_man.mp4";
+          return "media/textures/paris-by-diego.mp4";
         } else if (video.canPlayType('video/webm; codecs="vp8, vorbis"')) {
-          return "media/textures/vr_bench_man.webm";
+          return "media/textures/paris-by-diego.webm";
         } else {
           VRSamplesUtil.addError("No supported video available", 3000);
           return null;
@@ -117,18 +120,24 @@ found in the LICENSE file.
       }
 
       function init (preserveDrawingBuffer) {
+        console.log("preserveDrawingBuffer = " + preserveDrawingBuffer);
         var glAttribs = {
           alpha: false,
           antialias: false,
-          preserveDrawingBuffer: preserveDrawingBuffer
+          preserveDrawingBuffer: preserveDrawingBuffer // MUST BE FALSE for mobile!
         };
-        gl = webglCanvas.getContext("webgl", glAttribs);
+        gl = webglCanvas.getContext("webgl2", glAttribs);
         if (!gl) {
-          gl = webglCanvas.getContext("experimental-webgl", glAttribs);
+          gl = webglCanvas.getContext("webgl", glAttribs);
+          is_webgl2 = false;
           if (!gl) {
             VRSamplesUtil.addError("Your browser does not support WebGL.");
             return;
           }
+        }
+
+        if (!is_webgl2) {
+          VRSamplesUtil.addError("Your browser does not support WebGL 2.");
         }
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
@@ -144,7 +153,7 @@ found in the LICENSE file.
                 panorama.setVideo(defaultVideo);
               }
             });
-
+  
         var enablePerformanceMonitoring = WGLUUrl.getBool(
             'enablePerformanceMonitoring', false);
         stats = new WGLUStats(gl, enablePerformanceMonitoring);
@@ -205,7 +214,7 @@ found in the LICENSE file.
             vrDisplay.depthNear = 0.1;
             vrDisplay.depthFar = 1024.0;
 
-            init(true);
+            init(false);
 
             if (vrDisplay.capabilities.canPresent)
               vrPresentButton = VRSamplesUtil.addButton("Enter VR", "E", "media/icons/cardboard64.png", onVRRequestPresent);
@@ -261,6 +270,8 @@ found in the LICENSE file.
           return;
         }
         stats.begin();
+        if (is_preloaded)
+          panorama.preloadTexture(is_webgl2);
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -277,10 +288,10 @@ found in the LICENSE file.
 
           if (vrDisplay.isPresenting) {
             gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
-            panorama.render(frameData.leftProjectionMatrix, viewMat);
+            panorama.render(frameData.leftProjectionMatrix, viewMat, is_preloaded);
 
             gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
-            panorama.render(frameData.rightProjectionMatrix, viewMat);
+            panorama.render(frameData.rightProjectionMatrix, viewMat, is_preloaded);
 
             vrDisplay.submitFrame();
           } else {
