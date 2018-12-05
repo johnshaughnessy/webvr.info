@@ -217,7 +217,8 @@ window.VRPanorama = (function () {
 
     if (this.videoElement && !this.videoElement.paused) {
       if (is_webgl2) {
-        gl.invalidateFramebuffer(gl.FRAMEBUFFER, [ gl.COLOR_ATTACHMENT0, gl.DEPTH_ATTACHMENT]);
+        // add gl.DEPTH_ATTACHMENT into [ ] array, if necessary
+        gl.invalidateFramebuffer(gl.FRAMEBUFFER, [ gl.COLOR_ATTACHMENT0 ]);
       }
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, this.videoElement);
       // Clear supposed to happen after preloadTexture call
