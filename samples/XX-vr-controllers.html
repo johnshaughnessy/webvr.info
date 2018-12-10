@@ -309,6 +309,9 @@ found in the LICENSE file.
 
           // Loop through all the gamepad's axes and scale the gamepad geometry
           // by their value.
+          if (gamepad.axes.length == 2 && gamepad.axes[0] != 0 && gamepad.axes[1] != 0) {
+            console.log("Axis x: " + gamepad.axes[0] + ", y: " + gamepad.axes[1]);
+          } 
           var scale = [0.1, 0.1, 0.1];
           for (var j = 0; j < gamepad.axes.length; ++j) {
             switch (j%3) {
