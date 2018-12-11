@@ -401,8 +401,8 @@ found in the LICENSE file.
                 for (var j = 0; j < gamepad.buttons.length; ++j) {
                   if (gamepad.buttons[j].pressed) {
                     // Vibrate the gamepad using to the value of the button as
-                    // the vibration intensity.
-                    gamepad.hapticActuators[0].pulse(gamepad.buttons[j].value, 100);
+                    // the vibration intensity, normalized to 0.0..1.0 range.
+                    gamepad.hapticActuators[0].pulse(gamepad.buttons[j].value / 5.0, 100);
                     break;
                   }
                 }
