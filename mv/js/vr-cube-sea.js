@@ -47,10 +47,10 @@ window.VRCubeSea = (function () {
     "varying vec2 vTexCoord;",
 
     "void main() {",
-//    "  gl_FragColor = texture2D(diffuse, vTexCoord);",
-    "  vec4 color = texture2D(diffuse, vTexCoord);",
-    "  color.r = 1.0; color.g *= 0.8; color.b *= 0.7;", // indicate that Multiview is not in use, for testing
-    "  gl_FragColor = color;",
+    "  gl_FragColor = texture2D(diffuse, vTexCoord);",
+//    "  vec4 color = texture2D(diffuse, vTexCoord);",
+//    "  color.r = 1.0; color.g *= 0.8; color.b *= 0.7;", // indicate that Multiview is not in use, for testing
+//    "  gl_FragColor = color;",
     "}",
   ].join("\n");
 
@@ -195,6 +195,7 @@ window.VRCubeSea = (function () {
   }
 
   var mvrenReported = false;
+  var loops = 0;
   CubeSea.prototype.render = function (projectionMat, modelViewMat, stats, multiview) {
     var gl = this.gl;
     var program = this.program;
@@ -232,9 +233,19 @@ window.VRCubeSea = (function () {
     gl.vertexAttribPointer(program.attrib.position, 3, gl.FLOAT, false, 20, 0);
     gl.vertexAttribPointer(program.attrib.texCoord, 2, gl.FLOAT, false, 20, 12);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.uniform1i(program.uniform.diffuse, 0);
-    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    var videoEl = document.querySelector("video");
+    videoEl.loop = true;
+    videoEl.play();
+    // Change this to loops%5 to see the video disappear every 5th frame on Go
+    if (loops % 1 === 0) {
+      gl.activeTexture(gl.TEXTURE0);
+      gl.uniform1i(program.uniform.diffuse, 0);
+      gl.bindTexture(gl.TEXTURE_2D, this.texture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videoEl);
+    }
+    loops += 1;
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
 

@@ -78,6 +78,7 @@ found in the LICENSE file.
     <script src="js/vr-samples-util.js"></script>
   </head>
   <body>
+    <video><source src="./myVideo.mp4" type="video/mp4"></video>
     <canvas id="webgl-canvas"></canvas>
     <div id="presenting-message">Put on your headset now</div>
     <script>
@@ -122,9 +123,10 @@ found in the LICENSE file.
       gl.enable(gl.DEPTH_TEST);
       gl.enable(gl.CULL_FACE);
 
-      var textureLoader = new WGLUTextureLoader(gl);
-      var texture = textureLoader.loadTexture("media/textures/cube-sea.png");
-      var cubeSea = new VRCubeSea(gl, texture);
+      //var textureLoader = new WGLUTextureLoader(gl);
+      //var texture = textureLoader.loadTexture("media/textures/cube-sea.png");
+      var videoTexture = gl.createTexture();
+      var cubeSea = new VRCubeSea(gl, videoTexture);
 
       var stats = new WGLUStats(gl);
 
