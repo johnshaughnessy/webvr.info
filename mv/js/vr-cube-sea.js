@@ -236,13 +236,14 @@ window.VRCubeSea = (function () {
     var videoEl = document.querySelector("video");
     videoEl.loop = true;
     videoEl.play();
-    // Change this to loops%5 to see the video disappear every 5th frame on Go
-    if (loops % 1 === 0) {
+
+    if (loops % 5 === 0) {
       gl.activeTexture(gl.TEXTURE0);
       gl.uniform1i(program.uniform.diffuse, 0);
       gl.bindTexture(gl.TEXTURE_2D, this.texture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      // object will disappear every time we call texImage2D and pass it a video
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videoEl);
     }
     loops += 1;

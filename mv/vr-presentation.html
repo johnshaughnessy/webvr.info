@@ -288,14 +288,12 @@ found in the LICENSE file.
             
 
             var views = vrDisplay.getViews ? vrDisplay.getViews() : [];
-            console.log("views: " + vrDisplay.getViews);
             if (views.length > 0) {
               var view = views[0];
               gl.enable(gl.SCISSOR_TEST);
               for (var i = 0; i < views.length; ++i) {
                 var view = views[i];
                 var multiview = view.getAttributes().multiview;
-                console.log("multiview: " + multiview);
                 var viewport = view.getViewport();
 //                if (!testSingleBind) {
                   gl.bindFramebuffer(gl.FRAMEBUFFER, view.framebuffer);
